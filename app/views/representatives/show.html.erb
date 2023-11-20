@@ -1,0 +1,5 @@
+<h1><%= @representative.name %></h1>
+<p>Office: <%= @representative.title %></p>
+<p>Address: <%= [@representative.street, @representative.city, @representative.state, @representative.zip].compact.join(', ') %></p>
+<p>Party: <%= @representative.party %></p>
+<%= image_tag @representative.photo_url if @representative.photo_url %>
