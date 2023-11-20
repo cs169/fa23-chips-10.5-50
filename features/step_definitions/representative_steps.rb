@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 Given(/^a representative named "([^"]*)" does not exist in the database$/) do |name|
   Representative.where(name: name).destroy_all
 end
@@ -10,15 +12,15 @@ When(/^I import the representative "([^"]*)"$/) do |name|
   rep_info = OpenStruct.new(
     officials: [
       OpenStruct.new(
-        name: name,
+        name: name
         # ... Add other properties as needed
       )
     ],
-    offices: [
+    offices:   [
       # ... Add offices data as needed
     ]
   )
-  
+
   Representative.civic_api_to_representative_params(rep_info)
 end
 
