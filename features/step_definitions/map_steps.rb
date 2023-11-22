@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 Given /the following states exist/ do |states_table|
   states_table.hashes.each do |state|
     State.create!(name:         state['name'],
