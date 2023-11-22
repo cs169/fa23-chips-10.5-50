@@ -44,7 +44,7 @@ class Representative < ApplicationRecord
     end
 
     def update_or_create_representative(params)
-      rep = Representative.find_or_initialize_by(name: params[:official].name, ocdid: params[:ocdid])
+      rep = Representative.find_or_initialize_by(name: params[:official].name)
       rep.assign_attributes({
                               title:     params[:title],
                               street:    params[:address][:street],

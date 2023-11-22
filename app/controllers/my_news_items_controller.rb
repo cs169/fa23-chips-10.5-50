@@ -31,8 +31,9 @@ class MyNewsItemsController < SessionController
   end
 
   def destroy
+    rep_id = @news_item.representative_id
     @news_item.destroy
-    redirect_to representative_news_items_path(@representative),
+    redirect_to representative_news_items_path(rep_id),
                 notice: 'News was successfully destroyed.'
   end
 
