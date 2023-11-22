@@ -2,4 +2,11 @@
 <p>Office: <%= @representative.title %></p>
 <p>Address: <%= [@representative.street, @representative.city, @representative.state, @representative.zip].compact.join(', ') %></p>
 <p>Party: <%= @representative.party %></p>
-<%= image_tag @representative.photo_url if @representative.photo_url %>
+<div>
+  <% if @representative.photo_url %>
+    <%= image_tag @representative.photo_url %>
+  <% else %>
+    <p>Image not available</p>
+  <% end %>
+</div>
+<%= link_to "News Articles", representative_news_items_path(@representative.id), class: 'btn btn-primary' %>
