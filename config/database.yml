@@ -64,8 +64,8 @@ test:
 
 production:
   <<: *postgresql
-  database: actionmap_production
-  username: actionmap
+  database: dcm2q2ldsu3r3
+  username: apgjcnjayxwesk
   password: <%= ENV['ACTIONMAP_DATABASE_PASSWORD'] %>
   # The specified database role being used to connect to postgres.
   # To create additional roles in postgres see `$ createuser --help`.
