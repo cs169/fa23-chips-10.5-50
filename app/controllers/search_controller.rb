@@ -30,11 +30,10 @@ class SearchController < ApplicationController
   private
 
   def handle_invalid_address(error)
-    
     # You can customize this part according to your needs.
     # For instance, you could set a flash message to inform the user about the error.
     flash[:alert] = "Invalid address: #{error.message}"
-    
+
     # Redirect to a specific page or render an error view
     # redirect_to some_error_page_path
     # or
