@@ -113,5 +113,47 @@ RSpec.describe Representative, type: :model do
       end
     end    
     
+    # Testing Absence of Optional Fields
+    context 'when optional fields are absent' do
+      let(:rep_info_with_missing_fields) do
+        OpenStruct.new(
+          officials: [
+            OpenStruct.new(
+              name: 'Jane Doe',
+              address: [OpenStruct.new(
+                line1: '456 Another St',
+                city: 'DifferentTown',
+                state: 'DifferentState',
+                zip: '67890'
+              )]
+            )
+          ],
+          offices: [
+            OpenStruct.new(
+              name: 'City Council',
+              division_id: 'ocd-division/country:us/state:differentstate/place:differenttown',
+              official_indices: [0]
+            )
+          ]
+        )
+      end
+    
+      it 'handles missing optional fields correctly' do
+        expect {
+          described_class.civic_api_to_representative_params(rep_info_with_missing_fields)
+        }.not_to raise_error
+    
+        representative = Representative.last
+        expect(representative.name).to eq('Jane Doe')
+        expect(representative.party).to be_nil
+        expect(representative.photo_url).to be_nil
+        expect(representative.title).to eq('City Council')
+        expect(representative.street).to eq('456 Another St')
+        expect(representative.city).to eq('DifferentTown')
+        expect(representative.state).to eq('DifferentState')
+        expect(representative.zip).to eq('67890')
+      end
+    end    
+
   end
 end
