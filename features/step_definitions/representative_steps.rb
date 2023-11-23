@@ -31,3 +31,9 @@ end
 Then(/^I should see only one "([^"]*)" in the database$/) do |name|
   expect(Representative.where(name: name).count).to eq(1)
 end
+
+When('I click the first News Articles link') do
+  within('table#events tbody tr:first-child') do
+    click_link 'News Articles'
+  end
+end
