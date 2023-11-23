@@ -95,5 +95,22 @@ RSpec.describe Representative, type: :model do
         expect(existing_rep.zip).to eq('12345')
       end
     end
+
+    context 'with nil rep_info' do
+      let(:nil_rep_info) { nil }
+    
+      it 'handles nil rep_info without error' do
+        expect { described_class.civic_api_to_representative_params(nil_rep_info) }.not_to raise_error
+      end
+    end
+    
+    context 'with invalid rep_info' do
+      let(:invalid_rep_info) { 'aaaaaa' }
+    
+      it 'handles invalid rep_info without error' do
+        expect { described_class.civic_api_to_representative_params(invalid_rep_info) }.not_to raise_error
+      end
+    end
+    
   end
 end

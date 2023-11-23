@@ -5,6 +5,7 @@ class Representative < ApplicationRecord
 
   class << self
     def civic_api_to_representative_params(rep_info)
+      return [] if rep_info.nil? || !rep_info.respond_to?(:officials)
       rep_info.officials.each_with_index.map do |official, index|
         process_official(official, rep_info, index)
       end.compact
