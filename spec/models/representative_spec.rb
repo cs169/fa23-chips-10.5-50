@@ -95,5 +95,89 @@ RSpec.describe Representative, type: :model do
         expect(existing_rep.zip).to eq('12345')
       end
     end
+
+    # Testing for Invalid Data
+    context 'with nil rep_info' do
+      let(:nil_rep_info) { nil }
+
+      it 'handles nil rep_info without error' do
+        expect { described_class.civic_api_to_representative_params(nil_rep_info) }.not_to raise_error
+      end
+    end
+
+    context 'with invalid rep_info' do
+      let(:invalid_rep_info) { 'aaaaaa' }
+
+      it 'handles invalid rep_info without error' do
+        expect { described_class.civic_api_to_representative_params(invalid_rep_info) }.not_to raise_error
+      end
+    end
+
+    # Testing Absence of Optional Fields
+    context 'when optional fields are absent' do
+      let(:rep_info_with_missing_fields) do
+        OpenStruct.new(
+          officials: [
+            OpenStruct.new(
+              name:    'Jane Doe',
+              address: [OpenStruct.new(
+                line1: '456 Another St',
+                city:  'DifferentTown',
+                state: 'DifferentState',
+                zip:   '67890'
+              )]
+            )
+          ],
+          offices:   [
+            OpenStruct.new(
+              name:             'City Council',
+              division_id:      'ocd-division/country:us/state:differentstate/place:differenttown',
+              official_indices: [0]
+            )
+          ]
+        )
+      end
+      let(:representative) { described_class.last }
+
+      before do
+        described_class.civic_api_to_representative_params(rep_info_with_missing_fields)
+      end
+
+      it 'does not raise an error' do
+        expect { described_class.civic_api_to_representative_params(rep_info_with_missing_fields) }.not_to raise_error
+      end
+
+      it 'correctly sets the name' do
+        expect(representative.name).to eq('Jane Doe')
+      end
+
+      it 'handles absent party field correctly' do
+        expect(representative.party).to be_nil
+      end
+
+      it 'handles absent photo_url field correctly' do
+        expect(representative.photo_url).to be_nil
+      end
+
+      it 'correctly sets the title' do
+        expect(representative.title).to eq('City Council')
+      end
+
+      it 'correctly sets the street' do
+        expect(representative.street).to eq('456 Another St')
+      end
+
+      it 'correctly sets the city' do
+        expect(representative.city).to eq('DifferentTown')
+      end
+
+      it 'correctly sets the state' do
+        expect(representative.state).to eq('DifferentState')
+      end
+
+      it 'correctly sets the zip' do
+        expect(representative.zip).to eq('67890')
+      end
+    end
   end
 end

@@ -5,12 +5,21 @@ class Representative < ApplicationRecord
 
   class << self
     def civic_api_to_representative_params(rep_info)
+      # Return an empty array if rep_info is nil or doesn't have the expected structure
+      return [] if rep_info.nil? || !valid_rep_info?(rep_info)
+
       rep_info.officials.each_with_index.map do |official, index|
         process_official(official, rep_info, index)
       end.compact
     end
 
     private
+
+    # Add a validation method to check if rep_info has the required structure
+    def valid_rep_info?(rep_info)
+      rep_info.respond_to?(:officials) && rep_info.officials.is_a?(Array) &&
+        rep_info.respond_to?(:offices) && rep_info.offices.is_a?(Array)
+    end
 
     def process_official(official, rep_info, index)
       title, ocdid = extract_office_info(rep_info, index)
@@ -44,7 +53,7 @@ class Representative < ApplicationRecord
     end
 
     def update_or_create_representative(params)
-      rep = Representative.find_or_initialize_by(name: params[:official].name, ocdid: params[:ocdid])
+      rep = Representative.find_or_initialize_by(name: params[:official].name)
       rep.assign_attributes({
                               title:     params[:title],
                               street:    params[:address][:street],
