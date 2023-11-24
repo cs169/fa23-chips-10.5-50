@@ -14,7 +14,7 @@ class MyNewsItemsController < SessionController
   def create
     @news_item = NewsItem.new(news_item_params)
     if @news_item.save
-      redirect_to representative_news_item_path(@representative, @news_item),
+      redirect_to representative_news_item_path(@news_item.representative_id, @news_item),
                   notice: 'News item was successfully created.'
     else
       render :new, error: 'An error occurred when creating the news item.'
@@ -23,7 +23,7 @@ class MyNewsItemsController < SessionController
 
   def update
     if @news_item.update(news_item_params)
-      redirect_to representative_news_item_path(@representative, @news_item),
+      redirect_to representative_news_item_path(@news_item.representative_id, @news_item),
                   notice: 'News item was successfully updated.'
     else
       render :edit, error: 'An error occurred when updating the news item.'
@@ -31,8 +31,9 @@ class MyNewsItemsController < SessionController
   end
 
   def destroy
+    rep_id = @news_item.representative_id
     @news_item.destroy
-    redirect_to representative_news_items_path(@representative),
+    redirect_to representative_news_items_path(rep_id),
                 notice: 'News was successfully destroyed.'
   end
 

@@ -7,6 +7,9 @@
                     = link_to representative_new_my_news_item_path(@representative), class: 'mx-1 btn btn-primary' do
                         %i.fas.fa-plus
                         Add News Article
+                    = link_to representative_path(@representative.id), class: 'mx-1 btn btn-success' do
+                        %i.fas.fa-eye
+                        View #{@representative.name}'s Profile
                     = link_to representatives_path, class: 'mx-1 btn btn-info' do
                         %i.fas.fa-list
                         All Representatives
