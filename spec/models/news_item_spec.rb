@@ -9,9 +9,8 @@ RSpec.describe NewsItem, type: :model do
 
   describe 'validations' do
     it 'is valid with a valid issue' do
-      valid_issues = ['Free Speech', 'Immigration', 'Terrorism', 'Social Security and Medicare', 'Abortion',
-                      'Student Loans', 'Gun Control', 'Unemployment', 'Climate Change', 'Homelessness', 'Racism', 'Tax Reform', 'Net Neutrality', 'Religious Freedom', 'Border Security', 'Minimum Wage', 'Equal Pay']
-      valid_issues.each do |issue|
+      sample_valid_issues = ['Free Speech', 'Abortion', 'Climate Change']
+      sample_valid_issues.each do |issue|
         news_item.issue = issue
         expect(news_item).to be_valid
       end

@@ -9,15 +9,11 @@ RSpec.describe MyNewsItemsController, type: :controller do
 
   describe 'POST #create' do
     context 'with valid attributes' do
-      it 'creates a new news item with an issue' do
-        news_item_attributes = attributes_for(:news_item, issue: 'Climate Change')
+      let(:news_item_attributes) { attributes_for(:news_item, issue: 'Climate Change') }
 
-        expect do
-          post :create, params: {
-            representative_id: representative.id,
-            news_item:         news_item_attributes
-          }
-        end.to change(NewsItem, :count).by(1)
+      it 'creates a new news item with an issue' do
+        expect { post :create, params: { representative_id: representative.id, news_item: news_item_attributes } }
+          .to change(NewsItem, :count).by(1)
 
         expect(NewsItem.last.issue).to eq('Climate Change')
       end
@@ -28,18 +24,14 @@ RSpec.describe MyNewsItemsController, type: :controller do
 
   describe 'PUT #update' do
     let!(:news_item) { create(:news_item, issue: 'Immigration', representative: representative) }
+    let(:update_params) do
+      { representative_id: representative.id, id: news_item.id, news_item: { issue: 'Tax Reform' } }
+    end
 
-    context 'with valid attributes' do
-      it 'updates the issue of the news item' do
-        put :update, params: {
-          representative_id: representative.id,
-          id:                news_item.id,
-          news_item:         { issue: 'Tax Reform' }
-        }
-
-        news_item.reload
-        expect(news_item.issue).to eq('Tax Reform')
-      end
+    it 'updates the issue of the news item' do
+      expect { put :update, params: update_params }.to change {
+                                                         news_item.reload.issue
+                                                       }.from('Immigration').to('Tax Reform')
     end
 
     # Add other contexts for invalid attributes, etc.
