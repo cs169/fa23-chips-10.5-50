@@ -39,5 +39,14 @@ Rails.application.routes.draw do
         match '/representatives/:representative_id/my_news_item/:id', to:  'my_news_items#destroy',
                                                                       via: [:delete]
     end
+
+    # resources :representatives, only: [:index, :show] do
+    #     resources :news_items, only: [:index, :show]
+    
+    #     scope module: :representatives do
+    #       resources :my_news_items, only: [:new, :create, :edit, :update, :destroy]
+    #     end
+    #   end
+
     get '/search/(:address)' => 'search#search', :as => 'search_representatives'
 end
