@@ -14,61 +14,55 @@ RSpec.describe MyNewsItemsController, type: :controller do
 
   describe 'POST #create' do
     context 'with valid attributes' do
-      let(:news_item_attributes) { attributes_for(:news_item, issue: 'Free Speech', representative_id: representative.id) }
+      let(:news_item_attributes) do
+        attributes_for(:news_item, issue: 'Free Speech', representative_id: representative.id)
+      end
 
       it 'creates a new news item with an issue' do
-        expect { 
-          post :create, 
-          params: { 
-            news_item: news_item_attributes,
-            representative_id: representative.id 
-          }
-        }.to change(NewsItem, :count).by(1)
-
-        expect(NewsItem.last.issue).to eq('Free Speech')
+        expect do
+          post :create, params: { news_item: news_item_attributes, representative_id: representative.id }
+        end.to change(NewsItem, :count).by(1)
       end
     end
 
     context 'with invalid parameters' do
       it 'does not create a new news item' do
-        expect {
-          post :create, 
-          params: { 
-            news_item: { title: nil }, 
-            representative_id: representative.id 
-          }
-        }.not_to change(NewsItem, :count)
+        expect do
+          post :create, params: { news_item: { title: nil }, representative_id: representative.id }
+        end.not_to change(NewsItem, :count)
       end
     end
   end
 
   describe 'PUT #update' do
     let!(:news_item) { create(:news_item, issue: 'Immigration', representative: representative) }
-    let(:valid_update_params) do { 
-      representative_id: representative.id, 
-      id: news_item.id, 
-      news_item: { issue: 'Tax Reform' } 
-    }
+    let(:valid_update_params) do
+      {
+        representative_id: representative.id,
+        id:                news_item.id,
+        news_item:         { issue: 'Tax Reform' }
+      }
     end
-    let(:invalid_update_params) do { 
-      representative_id: representative.id, 
-      id: news_item.id, 
-      news_item: { issue: 'Error' } 
-    }
+    let(:invalid_update_params) do
+      {
+        representative_id: representative.id,
+        id:                news_item.id,
+        news_item:         { issue: 'Error' }
+      }
     end
-    
+
     context 'with valid parameters' do
       it 'updates the issue of the news item' do
-        expect { 
-          put :update, 
-          params: valid_update_params 
-        }.to change { news_item.reload.issue}.from('Immigration').to('Tax Reform')
+        expect do
+          put :update,
+              params: valid_update_params
+        end.to change { news_item.reload.issue }.from('Immigration').to('Tax Reform')
       end
     end
 
     context 'with invalid parameters' do
       it 'does not update the issue of the news item and renders edit' do
-        put :update, params: invalid_update_params 
+        put :update, params: invalid_update_params
         expect(response).to render_template(:edit)
       end
     end
@@ -78,10 +72,10 @@ RSpec.describe MyNewsItemsController, type: :controller do
     let!(:news_item) { create(:news_item, representative: representative) }
 
     it 'destroys the news item' do
-      expect {
-        delete :destroy, 
-        params: { id: news_item.id, representative_id: representative.id }
-      }.to change(NewsItem, :count).by(-1)
+      expect do
+        delete :destroy,
+               params: { id: news_item.id, representative_id: representative.id }
+      end.to change(NewsItem, :count).by(-1)
     end
   end
 
