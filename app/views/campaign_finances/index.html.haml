@@ -1,0 +1,51 @@
+.row.mt-2
+    .col-12.col-md-6.offset-md-3.col-xl-4.offset-xl-4
+        %h1.text-center Search for a Campaign Finance
+
+    .col-12.col-md-6.offset-md-3.col-xl-4.offset-xl-4
+        = form_tag campaign_finances_path, method: :get do
+            .form-group.row
+                .col-md-4
+                    %label.col-form-label
+                        Select a cycle:
+                .col-md-6
+                    = select_tag :cycle, options_for_select([['', nil],
+                        [2010, 2010], [2012, 2012], [2014, 2014],
+                        [2016, 2016], [2018, 2018], [2020, 2020]])
+
+            .form-group.row
+                .col-md-4
+                    %label.col-form-label
+                        Select a category:
+                .col-md-6
+                    = select_tag :category, options_for_select([['', nil],
+                        ['Candidate Loan', 'candidate-loan'],
+                        ['Contribution Total', 'contribution-total'],
+                        ['Debts Owed', 'debts-owed'],
+                        ['Disbursements Total', 'disbursements-total'],
+                        ['End Cash', 'end-cash'],
+                        ['Individual Total', 'individual-total'],
+                        ['PAC Total', 'pac-total'],
+                        ['Receipts Total', 'receipts-total'],
+                        ['Refund Total', 'refund-total']])
+
+            .actions
+                = submit_tag 'Search', class: 'btn btn-primary'
+
+- if @finances.length.positive?
+    .container-fluid
+        .row
+            .col-md-8.offset-md-2
+                .table-responsive-md.pt-5
+                    %table.table.table-striped.table-hover#events
+                        %thead.thead-dark
+                            %tr
+                                %th Name
+                                %th Party
+                                %th Total
+                        %tbody
+                            - @finances.each_with_index do |fin, _index|
+                                %tr
+                                    %td= fin['name']
+                                    %td= fin['party']
+                                    %td= fin['total_from_individuals']

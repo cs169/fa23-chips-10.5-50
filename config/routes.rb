@@ -49,4 +49,6 @@ Rails.application.routes.draw do
     #   end
 
     get '/search/(:address)' => 'search#search', :as => 'search_representatives'
+
+    get '/campaign_finances', to: 'campaign_finances#index'
 end
